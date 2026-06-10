@@ -1,0 +1,231 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Art Ecommerce API",
+    "version": "1.0.0",
+    "description": "API documentation for the Art Ecommerce Node.js Express server"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000",
+      "description": "Local server"
+    }
+  ],
+  "tags": [
+    { "name": "Users", "description": "Operations about users" },
+    { "name": "Arts", "description": "Operations about art items" }
+  ],
+  "paths": {
+    "/api/users": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get all users",
+        "responses": {
+          "200": { "description": "Success" }
+        }
+      },
+      "post": {
+        "tags": ["Users"],
+        "summary": "Create user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "email": { "type": "string" },
+                  "number": { "type": "string" },
+                  "address": { "type": "string" }
+                },
+                "required": ["name", "email"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "User created" },
+          "400": { "description": "Validation error" }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get user by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Success" },
+          "404": { "description": "Not found" }
+        }
+      },
+      "put": {
+        "tags": ["Users"],
+        "summary": "Update user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "email": { "type": "string" },
+                  "number": { "type": "string" },
+                  "address": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Updated" }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Delete user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Deleted" }
+        }
+      }
+    },
+    "/api/arts": {
+      "get": {
+        "tags": ["Arts"],
+        "summary": "Get all arts",
+        "parameters": [
+          { "name": "type", "in": "query", "schema": { "type": "string", "enum": ["wall decor", "room decor", "digital"] } },
+          { "name": "material", "in": "query", "schema": { "type": "string", "enum": ["canvas", "paper", "prints"] } },
+          { "name": "color", "in": "query", "schema": { "type": "string", "enum": ["acrylic", "poster"] } },
+          { "name": "shape", "in": "query", "schema": { "type": "string", "enum": ["landscape", "portrait", "square"] } },
+          { "name": "special_edition", "in": "query", "schema": { "type": "boolean" } }
+        ],
+        "responses": {
+          "200": { "description": "Success" }
+        }
+      },
+      "post": {
+        "tags": ["Arts"],
+        "summary": "Create art item",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "type": { "type": "string", "enum": ["wall decor", "room decor", "digital"] },
+                  "material": { "type": "string", "enum": ["canvas", "paper", "prints"] },
+                  "color": { "type": "string", "enum": ["acrylic", "poster"] },
+                  "shape": { "type": "string", "enum": ["landscape", "portrait", "square"] },
+                  "special_edition": { "type": "boolean" },
+                  "image_url": { "type": "string", "format": "uri" },
+                  "price": { "type": "number" },
+                  "description": { "type": "string" }
+                },
+                "required": ["type", "material", "color", "shape", "image_url", "price", "description"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Art created" },
+          "400": { "description": "Validation error" }
+        }
+      }
+    },
+    "/api/arts/{id}": {
+      "get": {
+        "tags": ["Arts"],
+        "summary": "Get art by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Success" },
+          "404": { "description": "Not found" }
+        }
+      },
+      "put": {
+        "tags": ["Arts"],
+        "summary": "Update art item",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "type": { "type": "string", "enum": ["wall decor", "room decor", "digital"] },
+                  "material": { "type": "string", "enum": ["canvas", "paper", "prints"] },
+                  "color": { "type": "string", "enum": ["acrylic", "poster"] },
+                  "shape": { "type": "string", "enum": ["landscape", "portrait", "square"] },
+                  "special_edition": { "type": "boolean" },
+                  "image_url": { "type": "string", "format": "uri" },
+                  "price": { "type": "number" },
+                  "description": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Updated" }
+        }
+      },
+      "delete": {
+        "tags": ["Arts"],
+        "summary": "Delete art item",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Deleted" }
+        }
+      }
+    }
+  }
+}

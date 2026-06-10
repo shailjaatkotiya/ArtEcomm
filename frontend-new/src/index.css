@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+@theme {
+  /* Museum palette — warm ivory, deep ink, clay accent */
+  --color-ivory: #f2efe7;
+  --color-parchment: #e9e4d8;
+  --color-ink: #17150f;
+  --color-ink-soft: #2a2620;
+  --color-clay: #9a3b26;
+  --color-stone: #6b665c;
+
+  --font-serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Outfit', sans-serif;
+
+  --animate-marquee: marquee 32s linear infinite;
+  --animate-bounce-slow: bounce-slow 1.8s ease-in-out infinite;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @keyframes bounce-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+  }
+}
+
+@layer base {
+  *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-ivory);
+    color: var(--color-ink);
+    overflow-x: hidden;
+    line-height: 1.6;
+    font-family: var(--font-sans);
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  body::-webkit-scrollbar {
+    display: none;
+  }
+
+  ::selection {
+    background: var(--color-clay);
+    color: var(--color-ivory);
+  }
+}
+
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Small-caps museum label */
+@utility label-caps {
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  font-size: 0.7rem;
+  font-weight: 500;
+}

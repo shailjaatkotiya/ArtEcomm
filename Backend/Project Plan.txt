@@ -1,0 +1,9 @@
+Landing Page - 
+Product Page (Gallery) - all products [with filters]
+Product Item Page - specific products [Add to cart, Buy Now] {Add dimension in JSON}
+Contact Page
+
+https://www.midlife.engineering/ - for product Page
+https://museum.unesco.org/returned-objects/VM-MA-RR-002 - for menu
+
+Splash screen
