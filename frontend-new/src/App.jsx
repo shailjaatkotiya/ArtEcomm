@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { CartProvider } from './context/CartContext';
@@ -14,6 +14,23 @@ import ProductsPage from './pages/ProductsPage';
 import ProductItemPage from './pages/ProductItemPage';
 import ContactPage from './pages/ContactPage';
 import './index.css';
+
+// three.js room split into its own chunk
+const ArtRingBackground = lazy(() => import('./components/ArtRingBackground'));
+
+// Immersive painting-ring backdrop on every page except the
+// collection listing, where the grid needs a quiet wall.
+function BackgroundLayer() {
+  const location = useLocation();
+  if (location.pathname === '/gallery') return null;
+  return (
+    <div className="fixed inset-0 z-0 pointer-events-none opacity-60" aria-hidden="true">
+      <Suspense fallback={null}>
+        <ArtRingBackground pathname={location.pathname} />
+      </Suspense>
+    </div>
+  );
+}
 
 function Home() {
   const location = useLocation();
@@ -58,7 +75,8 @@ function App() {
           {!splashDone && <SplashScreen onDone={handleSplashDone} />}
         </AnimatePresence>
 
-        <div className="relative font-sans text-ink bg-ivory max-w-[100vw] overflow-x-hidden min-h-screen">
+        <div className="relative font-sans text-ink bg-transparent max-w-[100vw] overflow-x-hidden min-h-screen">
+          <BackgroundLayer />
           <HamburgerMenu />
           <CartDrawer />
 

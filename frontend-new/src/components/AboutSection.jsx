@@ -39,7 +39,7 @@ const AboutSection = () => {
     <section
       id="about"
       ref={sectionRef}
-      className="relative bg-parchment text-ink min-h-screen flex items-center justify-center py-32 px-6 md:px-12 overflow-hidden"
+      className="relative bg-parchment/60 text-ink min-h-screen flex items-center justify-center py-32 px-6 md:px-12 overflow-hidden"
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 max-w-7xl w-full items-center">
         {/* Left: collage */}

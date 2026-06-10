@@ -90,7 +90,7 @@ const ProductItemPage = () => {
   ];
 
   return (
-    <div className="relative bg-ivory text-ink min-h-screen pt-32 pb-24 px-6 md:px-12">
+    <div className="relative bg-ivory/90 text-ink min-h-screen pt-32 pb-24 px-6 md:px-12">
       <div className="max-w-7xl mx-auto">
         <button
           onClick={() => navigate(-1)}

@@ -10,7 +10,7 @@ const ContactSection = ({ standalone = false }) => {
   return (
     <section
       id="contact"
-      className={`relative bg-ivory text-ink flex flex-col justify-center py-32 px-6 md:px-12 ${standalone ? 'min-h-screen pt-40' : 'min-h-screen'}`}
+      className={`relative bg-ivory/60 text-ink flex flex-col justify-center py-32 px-6 md:px-12 ${standalone ? 'min-h-screen pt-40' : 'min-h-screen'}`}
     >
       <div className="max-w-6xl mx-auto w-full grid grid-cols-1 md:grid-cols-5 gap-16">
         {/* Left: heading + visit info */}

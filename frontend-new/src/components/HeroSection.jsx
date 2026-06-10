@@ -14,7 +14,7 @@ const lineReveal = {
 
 const HeroSection = () => {
   return (
-    <section id="home" className="relative min-h-screen bg-ivory text-ink flex flex-col justify-end overflow-hidden pt-28 pb-0">
+    <section id="home" className="relative min-h-screen bg-transparent text-ink flex flex-col justify-end overflow-hidden pt-28 pb-0">
       {/* Catalog meta, top of the room */}
       <motion.div
         className="absolute top-28 left-6 md:left-12 right-6 md:right-12 flex justify-between label-caps text-stone"
@@ -74,17 +74,6 @@ const HeroSection = () => {
           </motion.div>
         </div>
       </div>
-
-      {/* Hero artwork strip pinned to bottom */}
-      <motion.div
-        className="relative h-[34vh] md:h-[42vh] w-full overflow-hidden"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.2, delay: 0.6 }}
-      >
-        <img src={heroImg} alt="Featured artwork" className="w-full h-full object-cover object-center" />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/30 to-transparent" />
-      </motion.div>
 
       {/* Marquee, midlife.engineering-style typographic strip */}
       <div className="bg-ink text-ivory py-4 overflow-hidden whitespace-nowrap">

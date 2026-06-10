@@ -27,7 +27,7 @@ const ProductSection = () => {
   }, []);
 
   return (
-    <section id="products" className="relative bg-ivory text-ink py-32 px-6 md:px-12">
+    <section id="products" className="relative bg-ivory/90 text-ink py-32 px-6 md:px-12">
       <div className="max-w-7xl mx-auto w-full">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-20">
           <div>
