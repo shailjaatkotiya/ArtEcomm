@@ -20,8 +20,6 @@ const ART_TYPES = [
   'POSTER',
 ];
 
-const PAINTING_COUNT = 8;
-const RADIUS = 6.4;
 
 // Soft radial puff for smoke sprites
 function makeSmokeTexture() {
@@ -304,76 +302,92 @@ function FramedPainting({ texture, width, height }) {
   );
 }
 
-// Each route gets its own stable base angle so navigating shows a
-// different stretch of the ring
-function routeAngle(path) {
+// Each route gets a stable horizontal drift so pages frame the
+// collage slightly differently
+function routeShift(path) {
   let h = 0;
   for (let i = 0; i < path.length; i++) h = (h * 31 + path.charCodeAt(i)) % 997;
-  return (h / 997) * Math.PI * 2;
+  return (h / 997 - 0.5) * 2.4; // -1.2 .. 1.2
 }
 
-// The viewer stands at the origin; paintings surround them, fronts
-// facing inward. Scroll spins the whole room around the camera.
-function PaintingRing({ pathname = '/' }) {
-  const group = useRef();
-  const smoothOffset = useRef(routeAngle(pathname));
+// Salon-wall collage slots — scattered heights, slight tilts
+const COLLAGE = [
+  { x: -7.4, y: 1.2, s: 1.0, r: -0.03 },
+  { x: -5.0, y: -1.2, s: 0.92, r: 0.04 },
+  { x: -2.6, y: 1.5, s: 1.08, r: -0.02 },
+  { x: -0.2, y: -1.0, s: 1.18, r: 0.03 },
+  { x: 2.2, y: 1.4, s: 0.9, r: -0.04 },
+  { x: 4.6, y: -1.3, s: 1.05, r: 0.02 },
+  { x: 6.9, y: 1.1, s: 0.85, r: -0.03 },
+  { x: 8.9, y: -0.9, s: 0.95, r: 0.05 },
+];
 
-  useFrame((state, delta) => {
-    if (!group.current) return;
-    const t = state.clock.elapsedTime;
-    // Glide toward the new route's angle instead of snapping
-    smoothOffset.current +=
-      (routeAngle(pathname) - smoothOffset.current) * Math.min(1, delta * 1.5);
-    group.current.rotation.y = t * 0.035 + window.scrollY * 0.0014 + smoothOffset.current;
-  });
+// Paintings hang as a collage wall in front of the camera. Idle, they
+// bob on a travelling wave (phase follows x). On scroll they split —
+// alternating rows drift up/down hard, with a slight tilt.
+function PaintingCollage({ pathname = '/' }) {
+  const group = useRef();
+  const itemRefs = useRef([]);
 
   const paintings = useMemo(
     () =>
-      Array.from({ length: PAINTING_COUNT }, (_, i) => ({
+      COLLAGE.map((slot, i) => ({
+        ...slot,
         texture: makePaintingTexture(i),
-        angle: (i / PAINTING_COUNT) * Math.PI * 2,
-        width: 1.7 + (i % 3) * 0.25,
-        height: 2.2 + ((i + 1) % 3) * 0.22,
-        y: ((i % 2) - 0.5) * 0.18,
+        width: (1.7 + (i % 3) * 0.25) * slot.s,
+        height: (2.2 + ((i + 1) % 3) * 0.22) * slot.s,
+        phase: slot.x * 0.55,
+        drift: (0.0024 + (i % 3) * 0.0011) * (i % 2 === 0 ? 1 : -1),
       })),
     []
   );
+
+  useFrame((state, delta) => {
+    const t = state.clock.elapsedTime;
+    const scroll = window.scrollY;
+
+    itemRefs.current.forEach((g, i) => {
+      if (!g) return;
+      const p = paintings[i];
+      // Travelling wave + strong alternating scroll parallax
+      g.position.y = p.y + Math.sin(t * 1.1 + p.phase) * 0.16 + scroll * p.drift;
+      g.rotation.z =
+        p.r + Math.sin(t * 0.6 + p.phase) * 0.02 + scroll * 0.00014 * (i % 2 === 0 ? 1 : -1);
+    });
+
+    if (group.current) {
+      const targetX = routeShift(pathname);
+      group.current.position.x += (targetX - group.current.position.x) * Math.min(1, delta * 1.5);
+    }
+  });
 
   return (
     <group ref={group}>
       {paintings.map((p, i) => (
         <group
           key={i}
-          position={[Math.sin(p.angle) * RADIUS, p.y, Math.cos(p.angle) * RADIUS]}
-          rotation={[0, p.angle + Math.PI, 0]}
+          ref={(el) => (itemRefs.current[i] = el)}
+          position={[p.x, p.y, 0]}
+          rotation={[0, 0, p.r]}
         >
           <FramedPainting texture={p.texture} width={p.width} height={p.height} />
-        </group>
-      ))}
-
-      {/* Art-type labels hang between the paintings, riding the same spin.
-          Text suspends while its font loads — keep the boundary local so
-          the paintings never wait on it. */}
-      <Suspense fallback={null}>
-        {ART_TYPES.map((label, i) => {
-          const angle = ((i + 0.5) / ART_TYPES.length) * Math.PI * 2;
-          return (
+          {/* Museum wall label under each work. Text suspends while its
+              font loads — keep the boundary local so paintings never wait. */}
+          <Suspense fallback={null}>
             <Text
-              key={label}
-              position={[Math.sin(angle) * (RADIUS - 0.3), 1.85, Math.cos(angle) * (RADIUS - 0.3)]}
-              rotation={[0, angle + Math.PI, 0]}
-              fontSize={0.19}
-              letterSpacing={0.28}
+              position={[0, -p.height / 2 - 0.32, 0]}
+              fontSize={0.16}
+              letterSpacing={0.26}
               color={INK}
-              fillOpacity={0.4}
+              fillOpacity={0.5}
               anchorX="center"
               anchorY="middle"
             >
-              {label}
+              {ART_TYPES[i]}
             </Text>
-          );
-        })}
-      </Suspense>
+          </Suspense>
+        </group>
+      ))}
     </group>
   );
 }
@@ -381,22 +395,16 @@ function PaintingRing({ pathname = '/' }) {
 const ArtRingBackground = ({ pathname = '/' }) => {
   return (
     <Canvas
-      camera={{ position: [0, 0.15, 0.01], fov: 55 }}
+      camera={{ position: [0, 0, 9], fov: 50 }}
       gl={{ alpha: true, antialias: true }}
       dpr={[1, 1.5]}
       style={{ background: 'transparent', opacity: 0.6 }}
-      onCreated={(state) => {
-        // R3F aims the default camera at the origin, which from a
-        // near-origin position means staring at the floor. Look out
-        // at the ring instead.
-        state.camera.lookAt(0, 0.15, -RADIUS);
-      }}
     >
       <ambientLight intensity={0.85} />
-      <pointLight position={[0, 2.5, 0]} intensity={14} color={IVORY} />
-      <directionalLight position={[3, 4, 2]} intensity={0.5} />
+      <pointLight position={[0, 2.5, 5]} intensity={20} color={IVORY} />
+      <directionalLight position={[3, 4, 6]} intensity={0.5} />
       <Smoke />
-      <PaintingRing pathname={pathname} />
+      <PaintingCollage pathname={pathname} />
     </Canvas>
   );
 };
