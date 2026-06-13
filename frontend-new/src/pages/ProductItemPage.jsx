@@ -4,8 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Minus, Plus } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import ArtImage from '../components/ArtImage';
-
-const API_URL = 'http://localhost:5000/api/arts';
+import { getArtById, getArts } from '../lib/catalogApi';
 
 const ProductItemPage = () => {
   const { id } = useParams();
@@ -24,18 +23,17 @@ const ProductItemPage = () => {
       setError(null);
       setQty(1);
       try {
-        const response = await fetch(`${API_URL}/${id}`);
-        if (!response.ok) throw new Error(`Work not found (${response.status})`);
-        const json = await response.json();
-        setProduct(json.data);
+        const productData = await getArtById(id);
 
-        // Companion pieces from the same room (type)
-        if (json.data?.type) {
-          const rel = await fetch(`${API_URL}?type=${encodeURIComponent(json.data.type)}`);
-          if (rel.ok) {
-            const relJson = await rel.json();
-            setRelated(relJson.data.filter((p) => p.id !== json.data.id).slice(0, 3));
-          }
+        if (!productData) {
+          throw new Error('Work not found');
+        }
+
+        setProduct(productData);
+
+        if (productData.type) {
+          const relatedItems = await getArts({ type: productData.type });
+          setRelated(relatedItems.filter((item) => item.id !== productData.id).slice(0, 3));
         }
       } catch (err) {
         console.error('Error fetching product:', err);
