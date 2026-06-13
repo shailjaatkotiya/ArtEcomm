@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import ProductCard from '../components/ProductCard';
-
-const API_URL = 'http://localhost:5000/api/arts';
+import { getArts } from '../lib/catalogApi';
 
 const FILTERS = [
   {
@@ -78,10 +77,8 @@ const ProductsPage = () => {
         });
         setSearchParams(query, { replace: true });
 
-        const response = await fetch(`${API_URL}?${query.toString()}`);
-        if (!response.ok) throw new Error(`Failed to fetch arts: ${response.status}`);
-        const json = await response.json();
-        setProducts(json.data);
+        const data = await getArts(filters);
+        setProducts(data);
       } catch (err) {
         console.error('Error fetching products:', err);
         setError(err.message);

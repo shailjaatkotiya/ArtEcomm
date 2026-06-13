@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ProductCard from './ProductCard';
-
-const API_URL = 'http://localhost:5000/api/arts';
+import { getArts } from '../lib/catalogApi';
 
 const ProductSection = () => {
   const [products, setProducts] = useState([]);
@@ -12,10 +11,8 @@ const ProductSection = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(API_URL);
-        if (!response.ok) throw new Error(`Failed to fetch arts: ${response.status}`);
-        const json = await response.json();
-        setProducts(json.data);
+        const data = await getArts();
+        setProducts(data);
       } catch (err) {
         console.error('Error fetching products:', err);
         setError(err.message);
