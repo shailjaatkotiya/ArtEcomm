@@ -70,22 +70,11 @@ const HamburgerMenu = () => {
     <>
       <header className="fixed top-0 left-0 right-0 z-[100] flex items-center justify-between px-5 md:px-12 py-4 bg-ink text-ivory border-b border-ivory/10">
 
-        {/* Hidden on Home — no point going back to where you are */}
-        {!isHome && (
-          <Link
-            to="/"
-            onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}
-            className="hidden md:flex items-center gap-2 rounded-full border border-current/70 px-5 py-3 label-caps"
-          >
-            <ChevronLeft size={15} strokeWidth={1.5} />
-            Back to Home
-          </Link>
-        )}
-
+        {/* Logo — stuck to the left */}
         <Link
           to="/"
           onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}
-          className="absolute left-5 md:left-1/2 md:-translate-x-1/2 top-5 flex items-center border border-current/70 bg-current/5"
+          className="flex items-center border border-current/70 bg-current/5 shrink-0"
         >
           <span className="grid place-items-center h-12 w-16 border-r border-current/60 font-serif text-xl">
             AE
@@ -94,6 +83,18 @@ const HamburgerMenu = () => {
             ArtEcomm
           </span>
         </Link>
+
+        {/* Hidden on Home — no point going back to where you are */}
+        {!isHome && (
+          <Link
+            to="/"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}
+            className="hidden md:flex items-center gap-2 rounded-full border border-current/70 px-5 py-3 label-caps ml-4"
+          >
+            <ChevronLeft size={15} strokeWidth={1.5} />
+            Back to Home
+          </Link>
+        )}
 
         <div className="ml-auto flex items-center gap-5 md:gap-8">
           <button
