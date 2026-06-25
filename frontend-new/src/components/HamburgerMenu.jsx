@@ -31,21 +31,12 @@ const itemVariants = {
 
 const HamburgerMenu = () => {
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [activeItem, setActiveItem] = useState(navItems[0]);
   const navigate = useNavigate();
   const location = useLocation();
   const { count, openDrawer } = useCart();
 
   const isHome = location.pathname === '/';
-
-  // Navbar: transparent over hero, solid once scrolled
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
 
   // Freeze background scroll while the full-screen menu is open
   useEffect(() => {
@@ -77,13 +68,8 @@ const HamburgerMenu = () => {
 
   return (
     <>
-      <header
-        className={`fixed top-0 left-0 right-0 z-[100] flex items-center justify-between px-5 md:px-12 transition-all duration-500 ${
-          scrolled && !open
-            ? 'py-4 bg-ink/90 backdrop-blur-md text-ivory border-b border-ivory/10'
-            : 'py-5 mix-blend-difference text-ivory'
-        }`}
-      >
+      <header className="fixed top-0 left-0 right-0 z-[100] flex items-center justify-between px-5 md:px-12 py-4 bg-ink text-ivory border-b border-ivory/10">
+
         {/* Hidden on Home — no point going back to where you are */}
         {!isHome && (
           <Link
