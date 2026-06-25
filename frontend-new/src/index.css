@@ -6,7 +6,7 @@
   --color-parchment: #e3e2df;
   --color-ink: #121212;
   --color-ink-soft: #242424;
-  --color-clay: #9a3b26; /* sole accent, kept */
+  --color-clay: #555555; /* former accent, now neutral gray — pure B&W */
   --color-stone: #6e6e6e;
 
   --font-serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
@@ -78,8 +78,8 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 18px;
-    height: 18px;
+    width: 11px;
+    height: 11px;
     border-radius: 50%;
     background: #fff;
     mix-blend-mode: difference;

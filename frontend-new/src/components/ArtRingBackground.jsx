@@ -5,7 +5,7 @@ import * as THREE from 'three';
 
 const INK = '#121212';
 const IVORY = '#f4f3f1';
-const CLAY = '#9a3b26'; // sole accent, kept
+const CLAY = '#555555'; // former accent, now neutral gray
 const STONE = '#6e6e6e';
 const GOLD = '#bdbdbd'; // gold demoted to neutral gray for B&W theme
 

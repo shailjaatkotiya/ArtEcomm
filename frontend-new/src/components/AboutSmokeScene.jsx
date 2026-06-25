@@ -118,7 +118,7 @@ function MuseumRings() {
       {[2.8, 4.1, 5.4].map((radius, index) => (
         <mesh key={radius} position={[0, 0, index * -0.06]}>
           <torusGeometry args={[radius, 0.012, 8, 120]} />
-          <meshBasicMaterial color="#9a3b26" transparent opacity={0.12 - index * 0.025} />
+          <meshBasicMaterial color="#555555" transparent opacity={0.12 - index * 0.025} />
         </mesh>
       ))}
     </group>

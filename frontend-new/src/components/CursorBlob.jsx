@@ -32,9 +32,9 @@ const CursorBlob = () => {
     const onOver = (e) => {
       if (e.target.closest?.(INTERACTIVE)) {
         locked = true;
-        blob.style.width = '64px';
-        blob.style.height = '64px';
-        blob.style.fontSize = '22px';
+        blob.style.width = '44px';
+        blob.style.height = '44px';
+        blob.style.fontSize = '16px';
         blob.innerHTML = '→';
       }
     };
@@ -42,8 +42,8 @@ const CursorBlob = () => {
     const onOut = (e) => {
       if (e.target.closest?.(INTERACTIVE)) {
         locked = false;
-        blob.style.width = '18px';
-        blob.style.height = '18px';
+        blob.style.width = '11px';
+        blob.style.height = '11px';
         blob.style.fontSize = '0px';
         blob.innerHTML = '';
       }
