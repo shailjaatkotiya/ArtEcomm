@@ -4,13 +4,24 @@ An art e-commerce store: an immersive, black-and-white React storefront backed b
 
 ## Demo
 
-https://github.com/user-attachments/assets/your-upload-id
+<video
+  src="https://github.com/shailjaatkotiya/ArtEcomm/raw/bw-theme-polish/Video%20Project%207.mp4"
+  poster="frontend-new/src/assets/hero.png"
+  controls
+  muted
+  loop
+  playsinline
+  width="100%">
+  Your renderer can't play embedded video —
+  <a href="https://github.com/shailjaatkotiya/ArtEcomm/raw/bw-theme-polish/Video%20Project%207.mp4">open the demo video</a>.
+</video>
 
-> The walkthrough recording lives in the repo as [`Video Project 7.mp4`](Video%20Project%207.mp4). GitHub only autoplays videos that are uploaded through its UI, so to embed it inline drag the file into a README edit on github.com and replace the link above with the generated `user-attachments` URL.
-
-<video src="Video%20Project%207.mp4" controls width="100%"></video>
-
-If the player above does not render, [download / open the demo video](Video%20Project%207.mp4).
+> **Players, ranked by where they render:**
+> - The `<video>` player above renders inline in VS Code's markdown preview and on GitHub when served from the absolute `raw` URL.
+> - Local copy: [`Video Project 7.mp4`](Video%20Project%207.mp4).
+> - For a guaranteed autoplay thumbnail on github.com, edit the README in GitHub's web UI, drag the `.mp4` into the editor, and paste the generated `user-attachments` URL here.
+>
+> _Once this branch merges to `main`, swap `bw-theme-polish` → `main` in the URLs above._
 
 ## Stack
 
