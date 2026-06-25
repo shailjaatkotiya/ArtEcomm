@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  /* Museum palette — warm ivory, deep ink, clay accent */
-  --color-ivory: #f2efe7;
-  --color-parchment: #e9e4d8;
-  --color-ink: #17150f;
-  --color-ink-soft: #2a2620;
-  --color-clay: #9a3b26;
-  --color-stone: #6b665c;
+  /* Black & white museum palette — neutral grays, single clay accent */
+  --color-ivory: #f4f3f1;
+  --color-parchment: #e3e2df;
+  --color-ink: #121212;
+  --color-ink-soft: #242424;
+  --color-clay: #9a3b26; /* sole accent, kept */
+  --color-stone: #6e6e6e;
 
   --font-serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
   --font-sans: 'Outfit', sans-serif;
@@ -40,7 +40,9 @@
   body {
     background-color: var(--color-ivory);
     color: var(--color-ink);
-    overflow-x: hidden;
+    /* clip (not hidden) so the body never becomes the scroll container —
+       keeps the viewport scrollable + lets scroll listeners / scroll-snap work */
+    overflow-x: clip;
     line-height: 1.6;
     font-family: var(--font-sans);
     -ms-overflow-style: none;
@@ -54,6 +56,43 @@
   ::selection {
     background: var(--color-clay);
     color: var(--color-ivory);
+  }
+
+  /* Lock background scroll when a fixed overlay (menu / cart) is open */
+  body.overlay-open {
+    overflow: hidden;
+    touch-action: none;
+  }
+}
+
+/* ==========================================================
+   Custom cursor — transparent blend blob (fine pointers only)
+   ========================================================== */
+@media (hover: hover) and (pointer: fine) {
+  html.has-cursor,
+  html.has-cursor * {
+    cursor: none !important;
+  }
+
+  .cursor-blob {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    mix-blend-mode: difference;
+    pointer-events: none;
+    z-index: 2147483647;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    font-size: 0;
+    font-weight: 600;
+    color: #121212;
+    will-change: transform, width, height;
   }
 }
 

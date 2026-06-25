@@ -95,7 +95,7 @@ function SmokeField() {
             opacity={particle.opacity}
             depthWrite={false}
             blending={THREE.AdditiveBlending}
-            color="#d9cab5"
+            color="#cfcfcf"
           />
         </mesh>
       ))}

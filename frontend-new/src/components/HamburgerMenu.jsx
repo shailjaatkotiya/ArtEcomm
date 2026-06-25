@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ShoppingBag } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 
 const navItems = [
@@ -31,12 +31,35 @@ const itemVariants = {
 
 const HamburgerMenu = () => {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [activeItem, setActiveItem] = useState(navItems[0]);
   const navigate = useNavigate();
+  const location = useLocation();
   const { count, openDrawer } = useCart();
+
+  const isHome = location.pathname === '/';
+
+  // Navbar: transparent over hero, solid once scrolled
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Freeze background scroll while the full-screen menu is open
+  useEffect(() => {
+    document.body.classList.toggle('overlay-open', open);
+    return () => document.body.classList.remove('overlay-open');
+  }, [open]);
 
   const handleClick = (e, href) => {
     e.preventDefault();
+    // Already on Home → don't re-navigate to Home, just close
+    if (href === '/' && isHome) {
+      setOpen(false);
+      return;
+    }
     setOpen(false);
     setTimeout(() => {
       if (href.startsWith('/#')) {
@@ -54,15 +77,24 @@ const HamburgerMenu = () => {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-[100] flex items-center justify-between px-5 md:px-12 py-5 mix-blend-difference text-ivory">
-        <Link
-          to="/"
-          onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}
-          className="hidden md:flex items-center gap-2 rounded-full border border-current/70 px-5 py-3 label-caps"
-        >
-          <ChevronLeft size={15} strokeWidth={1.5} />
-          Back to Home
-        </Link>
+      <header
+        className={`fixed top-0 left-0 right-0 z-[100] flex items-center justify-between px-5 md:px-12 transition-all duration-500 ${
+          scrolled && !open
+            ? 'py-4 bg-ink/90 backdrop-blur-md text-ivory border-b border-ivory/10'
+            : 'py-5 mix-blend-difference text-ivory'
+        }`}
+      >
+        {/* Hidden on Home — no point going back to where you are */}
+        {!isHome && (
+          <Link
+            to="/"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}
+            className="hidden md:flex items-center gap-2 rounded-full border border-current/70 px-5 py-3 label-caps"
+          >
+            <ChevronLeft size={15} strokeWidth={1.5} />
+            Back to Home
+          </Link>
+        )}
 
         <Link
           to="/"
@@ -114,7 +146,7 @@ const HamburgerMenu = () => {
       <AnimatePresence>
         {open && (
           <motion.nav
-            className="fixed inset-0 z-[90] overflow-x-hidden overflow-y-auto bg-ink/78 text-ivory backdrop-blur-md"
+            className="fixed inset-0 z-[90] h-[100dvh] overflow-hidden bg-ink/78 text-ivory backdrop-blur-md"
             data-motion-runtime={motion ? 'ready' : 'missing'}
             variants={overlayVariants}
             initial="hidden"
@@ -138,7 +170,7 @@ const HamburgerMenu = () => {
               aria-hidden="true"
             />
 
-            <div className="relative z-10 flex min-h-screen flex-col px-6 pb-8 pt-28 md:px-12 md:pb-8 md:pt-24">
+            <div className="relative z-10 flex h-[100dvh] flex-col px-6 pb-8 pt-24 md:px-12 md:pb-8 md:pt-24">
               <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
                 <div>
                   <p className="label-caps text-ivory/45">This gallery is also available</p>

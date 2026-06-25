@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Minus, Plus } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import ArtImage from '../components/ArtImage';
+import Loader from '../components/Loader';
 import { getArtById, getArts } from '../lib/catalogApi';
 
 const ProductItemPage = () => {
@@ -46,6 +47,17 @@ const ProductItemPage = () => {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [id]);
 
+  // Show one element at a time on this page — vertical scroll-snap on the
+  // document while mounted, restored on unmount.
+  useEffect(() => {
+    const root = document.documentElement;
+    const prev = root.style.scrollSnapType;
+    root.style.scrollSnapType = 'y mandatory';
+    return () => {
+      root.style.scrollSnapType = prev;
+    };
+  }, []);
+
   const handleAddToCart = () => {
     addItem(product, qty);
     openDrawer();
@@ -58,8 +70,8 @@ const ProductItemPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-ivory flex items-center justify-center">
-        <p className="font-serif italic text-3xl text-stone">Unwrapping the piece…</p>
+      <div className="bg-ivory">
+        <Loader full label="Unwrapping the piece" />
       </div>
     );
   }
@@ -88,19 +100,20 @@ const ProductItemPage = () => {
   ];
 
   return (
-    <div className="relative bg-ivory/90 text-ink min-h-screen pt-32 pb-24 px-6 md:px-12">
-      <div className="max-w-7xl mx-auto">
+    <div className="relative bg-ivory/90 text-ink px-6 md:px-12">
+      {/* Section 1 — the work */}
+      <section className="snap-start min-h-[100dvh] max-w-7xl mx-auto flex flex-col justify-center pt-28 pb-12">
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 label-caps text-stone hover:text-clay transition-colors cursor-pointer mb-12"
+          className="flex items-center gap-2 label-caps text-stone hover:text-clay transition-colors cursor-pointer mb-8 w-fit"
         >
           <ArrowLeft size={14} /> Back to the collection
         </button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+        <div className="grid place-items-center">
           {/* Artwork, framed like a vitrine */}
           <motion.div
-            className="lg:sticky lg:top-32 self-start"
+            className="w-full max-w-md"
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
@@ -119,9 +132,14 @@ const ProductItemPage = () => {
               Photographed in natural light · Frame not included
             </p>
           </motion.div>
+        </div>
+      </section>
 
+      {/* Section 2 — the record */}
+      <section className="snap-start min-h-[100dvh] max-w-7xl mx-auto flex items-center py-24">
           {/* Object record */}
           <motion.div
+            className="w-full max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
@@ -190,11 +208,11 @@ const ProductItemPage = () => {
               though the wall rarely gives them back.
             </p>
           </motion.div>
-        </div>
+      </section>
 
-        {/* Companion pieces */}
-        {related.length > 0 && (
-          <div className="mt-32">
+      {/* Section 3 — companion pieces */}
+      {related.length > 0 && (
+        <section className="snap-start min-h-[100dvh] max-w-7xl mx-auto flex flex-col justify-center py-24">
             <div className="flex items-end justify-between mb-12">
               <h2 className="font-serif text-4xl md:text-5xl">
                 From the same <span className="italic">room.</span>
@@ -220,9 +238,8 @@ const ProductItemPage = () => {
                 </Link>
               ))}
             </div>
-          </div>
-        )}
-      </div>
+        </section>
+      )}
     </div>
   );
 };
