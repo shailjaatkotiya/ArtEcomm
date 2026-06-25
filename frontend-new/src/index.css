@@ -53,6 +53,10 @@
     display: none;
   }
 
+  header{
+    height: 12vh;
+  }
+
   ::selection {
     background: var(--color-clay);
     color: var(--color-ivory);
