@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import ProductCard from '../components/ProductCard';
+import Loader from '../components/Loader';
 import { getArts } from '../lib/catalogApi';
 
 const FILTERS = [
@@ -145,6 +146,7 @@ const ProductsPage = () => {
         </div>
 
         {/* Results */}
+        {loading && products.length === 0 && <Loader label="Consulting the registrar" />}
         {error && <p className="text-center text-clay text-lg py-20">Error: {error}</p>}
 
         {!loading && !error && products.length === 0 && (

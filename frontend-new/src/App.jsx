@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'r
 import { AnimatePresence } from 'framer-motion';
 import { CartProvider } from './context/CartContext';
 import SplashScreen from './components/SplashScreen';
+import CursorBlob from './components/CursorBlob';
 import HamburgerMenu from './components/HamburgerMenu';
 import CartDrawer from './components/CartDrawer';
 import Footer from './components/Footer';
@@ -71,6 +72,7 @@ function App() {
   return (
     <Router>
       <CartProvider>
+        <CursorBlob />
         <AnimatePresence>
           {!splashDone && <SplashScreen onDone={handleSplashDone} />}
         </AnimatePresence>

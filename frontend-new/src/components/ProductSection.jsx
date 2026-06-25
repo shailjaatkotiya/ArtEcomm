@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ProductCard from './ProductCard';
+import Loader from './Loader';
 import { getArts } from '../lib/catalogApi';
 
 const ProductSection = () => {
@@ -41,11 +42,7 @@ const ProductSection = () => {
           </Link>
         </div>
 
-        {loading && (
-          <p className="text-center font-serif italic text-2xl text-stone py-20">
-            Hanging the works…
-          </p>
-        )}
+        {loading && <Loader label="Hanging the works" />}
         {error && <p className="text-center text-clay text-lg py-20">Error: {error}</p>}
 
         {!loading && !error && (

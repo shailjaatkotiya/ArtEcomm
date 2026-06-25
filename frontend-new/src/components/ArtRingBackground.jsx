@@ -3,11 +3,11 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
 import * as THREE from 'three';
 
-const INK = '#17150f';
-const IVORY = '#f2efe7';
-const CLAY = '#9a3b26';
-const STONE = '#6b665c';
-const GOLD = '#b5a642';
+const INK = '#121212';
+const IVORY = '#f4f3f1';
+const CLAY = '#555555'; // former accent, now neutral gray
+const STONE = '#6e6e6e';
+const GOLD = '#bdbdbd'; // gold demoted to neutral gray for B&W theme
 
 const ART_TYPES = [
   'WALL DECOR',
@@ -36,11 +36,11 @@ function makeSmokeTexture() {
   return new THREE.CanvasTexture(canvas);
 }
 
-// Procedural paintings — beige/brown grounds, black artwork, in the
+// Procedural paintings — grayscale grounds, black artwork, in the
 // neutral-abstract style of contemporary wall-art prints
-const BEIGE = ['#e9e0cd', '#ddd0b8', '#e4d9c3', '#d6c7ab'];
-const BROWN = ['#8a6948', '#a87f55', '#6b4f33', '#b08968'];
-const CHARCOAL = '#211d18';
+const BEIGE = ['#e6e6e6', '#d8d8d8', '#e0e0e0', '#cfcfcf'];
+const BROWN = ['#8c8c8c', '#a0a0a0', '#6b6b6b', '#b0b0b0'];
+const CHARCOAL = '#1d1d1d';
 
 function speckle(ctx, w, h) {
   // Paper grain
@@ -267,7 +267,7 @@ function Smoke({ count = 16 }) {
             transparent
             opacity={0.1}
             depthWrite={false}
-            color="#a99e8a"
+            color="#a0a0a0"
           />
         </mesh>
       ))}
